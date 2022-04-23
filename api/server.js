@@ -13,7 +13,7 @@ mongoose.connect("mongodb://localhost/todo")
 const Todo = require("./models/Todo")
 
 app.get("/todos", async (req, res) => {
-    const todos = await Todo.find()
+    const todos = await Todo.find().sort({createdAt: -1})
     res.json(todos)
 })
 
