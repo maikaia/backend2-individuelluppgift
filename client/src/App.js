@@ -1,93 +1,22 @@
-import {useState, useEffect } from "react"
+import React, {useState} from "react"
+import { Route, Routes, Navigate } from "react-router-dom"
 
-const API_BASE = "http://localhost:3001"
+import LoginPage from "./pages/LoginPage"
+import RegisterPage from "./pages/RegisterPage"
+import TodoPage from "./pages/TodoPage"
 
-function App() {
-  const [todos, setTodos] = useState([]);
-  const [popupActive, setPopupActive] = useState(false)
-  const [newTodo, setNewTodo] = useState("")
-  
-  useEffect (() => {
-    GetTodos ();
-  }, [])
+export const CredentialsContext = React.createContext();
 
-  const GetTodos = () => {
-    fetch(API_BASE + "/todos")
-      .then (res => res.json())
-      .then (data => setTodos(data))
-      .catch(err => console.error ("Error: ", err));
-  }
-  
-  const completeTodo = async id => {
-      const data = await fetch(API_BASE + '/todo/complete/' + id)
-      .then(res => res.json());
-  
-        setTodos(todos => todos.map(todo => {
-            if (todo._id === data._id) {
-              todo.complete = data.complete;
-            }
-      
-            return todo;
-      }))
-  }
-
-  const addTodo = async () => {
-    const data = await fetch(API_BASE + "/todo/new", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        text: newTodo
-      })
-    }).then(res => res.json())
-    setTodos([...todos, data])
-    setPopupActive(false)
-    setNewTodo("")
-  }
-
+export default function App() {
+  const credentialsState = useState(null);
   return (
-    <div className="App">
-     <h1>Welcome</h1>
-     <h4>Your Tasks</h4>
-
-     <div className="todos">
-     {todos.filter((item) => !item.complete).map(todo => (
-        <div className="todo" key={ todo._id } onClick={() => completeTodo(todo._id)}>
-          <div className="checkbox" ></div>
-
-          <div className="text">{ todo.text }</div>
-        </div>
-       ))}
-
-       <h4>Completed tasks</h4>
-
-       {todos.filter((item) => item.complete).map(todo => (
-        <div className="todo is-complete" key={ todo._id } onClick={() => completeTodo(todo._id)}>
-          <div className="checkbox" ></div>
-
-          <div className="text">{ todo.text }</div>
-        </div>
-       ))}
-     </div>
-     <div className="addPopup" onClick={() => setPopupActive(true)}>+</div>
-
-     {popupActive ? (
-       <div className="popup">
-         <div className="closePopup" onClick={() => setPopupActive(false)}>x</div>
-         <div className="content">
-           <h3>Add Task</h3>
-           <input 
-              type="text" 
-              className="add-todo-input" 
-              onChange={e => setNewTodo(e.target.value)} 
-              value={newTodo} />
-              <div className="button" onClick={addTodo}>Create task</div>
-         </div>
-       </div>
-     ) : ""}
-    </div>
-  );
+    <CredentialsContext.Provider value={credentialsState}>
+      <Routes>
+        <Route path="/" element={ <Navigate to="/auth/login" /> } /> 
+        <Route path="/auth/login" element={ <LoginPage /> } />
+        <Route path="/users" element={ <RegisterPage /> } />
+        <Route path="/todos" element={ <TodoPage /> } />
+      </Routes>
+    </CredentialsContext.Provider>
+  )
 }
-
-export default App;
