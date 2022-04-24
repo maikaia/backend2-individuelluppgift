@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken")
 const { verifyUser } = require("../models/User")
-const { saveOldToken } = require("../models/OldToken")
 
 const requireLogin = (req, res, next) => {
     if (req.user) {
@@ -40,11 +39,4 @@ const loginUser = async (req, res) => {
     }
 }
 
-const logoutUser = async (req, res) => {
-    const authHeader = req.header("Authorization")
-    const token = authHeader.split(" ")[1]
-    await saveOldToken(token)
-    res.json({ message: "User logged out" })
-}
-
-module.exports = { requireLogin, createToken, loginUser, logoutUser }
+module.exports = { requireLogin, createToken, loginUser }

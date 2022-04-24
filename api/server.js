@@ -6,12 +6,10 @@ require("dotenv").config()
 
 const userRouter = require("./routes/users")
 const authRouter = require("./routes/auth")
-const todoRouter = require("./routes/todos")
 
 const { findOldToken } = require("./models/OldToken")
 
 const Todo = require("./models/Todo")
-const { User } = require("./models/User")
 
 const { requireLogin } = require("./controllers/auth")
 

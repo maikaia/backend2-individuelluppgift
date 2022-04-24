@@ -1,14 +1,12 @@
-import {useState, useEffect, useContext } from "react"
-import { CredentialsContext } from "../App";
+import React, {useState, useEffect } from "react"
 import { useNavigate } from 'react-router-dom'
 
 const API_BASE = "http://localhost:3001"
 
-function TodoPage() {
+export default function TodoPage() {
   const [todos, setTodos] = useState([]);
   const [popupActive, setPopupActive] = useState(false)
   const [newTodo, setNewTodo] = useState("")
-  const [credentials, setCredentials] = useContext(CredentialsContext);
   const navigate = useNavigate()
   
   useEffect (() => {
@@ -42,7 +40,6 @@ function TodoPage() {
             if (todo._id === data._id) {
               todo.complete = data.complete;
             }
-      
             return todo;
       }))
   }
@@ -66,15 +63,14 @@ function TodoPage() {
   }
 
   const logout = () => {
-    setCredentials(null);
     localStorage.clear()
     navigate("/")
   };
 
   return (
     <div className="App">
-        {credentials && <button onClick={logout}>Logout</button>}
-     <h1>Welcome {credentials && credentials.username} </h1>
+      <button className="button logout" onClick={logout}>Logout</button>
+     <h1>Welcome </h1>
      <h4>Your Tasks</h4>
 
      <div className="todos">
@@ -115,5 +111,3 @@ function TodoPage() {
     </div>
   );
 }
-
-export default TodoPage;

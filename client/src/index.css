@@ -154,3 +154,9 @@ h4 {
   text-align: center;
   cursor: pointer;
 }
+
+.logout {
+  position: absolute;
+  right: 0px;
+  margin-right: 32px;
+}

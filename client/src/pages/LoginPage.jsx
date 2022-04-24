@@ -1,13 +1,11 @@
-import React, { useState, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { CredentialsContext } from "../App";
+import React, { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 
 const API_BASE = "http://localhost:3001/auth/login"
 
 export default function LoginPage() {
     const [ username, setUsername ] = useState("")
     const [ password, setPassword ] = useState("")
-    const [, setCredentials] = useContext(CredentialsContext)
     const navigate = useNavigate()
 
     const onSubmit = async (e) => {
@@ -22,15 +20,13 @@ export default function LoginPage() {
         .then(res => res.json())
         .then(data => {
             const token = data.user.token
-            console.log("DATA: ", data.user.username)
-            //console.log("TOKEN: ", token)
             localStorage.setItem("todotodo", token)
         })
-        .then(() => {setCredentials(payload)})
         navigate("/todos")
     }
+
     return (
-        <div className="app">
+        <div className="App">
         
             <h1>Log in</h1>
 
@@ -52,8 +48,9 @@ export default function LoginPage() {
                      placeholder="Password"
                      onChange={e => setPassword(e.target.value)}
                     />
-                    <button type="submit">Login</button>
+                    <button className="button" type="submit">Login</button>
                 </form>
+                <Link to="/users"><button className="button">Create Account</button></Link>
             </div>
         </div>
     )
